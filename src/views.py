@@ -235,7 +235,7 @@ class UpdateView(tkinter.Frame):
         row += 1
         transbtn.grid(row = row, column = 2, sticky = tkinter.EW)
 
-    @alert
+    # @alert
     def update(self):
         root = self.winfo_toplevel()
         jsonfilename = self._jsonfile.get()
@@ -363,20 +363,22 @@ class _btn_class(tkinter.Button):
         
 class TabsView(tkinter.Frame):
 
-    def __init__(self, master):
+    def __init__(self, master, column = 255):
         tkinter.Frame.__init__(self, master=master)
         self._container = tkinter.PanedWindow(master=self)
         self._tabbtns = []
         self.curbtn = None
         self._btncontainer = tkinter.Frame(master=self)
         self._btncontainer.pack(anchor = tkinter.W)
-        self._container.pack()
+        self._column = column
+        self._container.pack(side = tkinter.LEFT)
 
     def add(self, label, viewclass):
         btn = _btn_class(self._btncontainer, label, viewclass, self._container)
-        btn.pack(side = tkinter.LEFT, ipadx = 10)
-        btn.bind(sequence='<Button-1>', func=self._btn_select)
         self._tabbtns.append(btn)
+        index = len(self._tabbtns) - 1
+        btn.grid(row = index // self._column, column = index % self._column, ipadx = 10, sticky = tkinter.NSEW)
+        btn.bind(sequence='<Button-1>', func=self._btn_select)
         if not self.curbtn:
             btn.select()
             self.curbtn = btn 
@@ -418,24 +420,13 @@ class CompErl(tkinter.Frame):
 class ToolsView(tkinter.Frame):
     def __init__(self, master):
         tkinter.Frame.__init__(self, master = master)
-        btns = self.buttons()
-        for i in range(0, len(btns)):
-            text, command = btns[i]
-            btn = tkinter.Button(master=self, text = text, command = command)
-            btn.grid(row = i // 5, column = i % 5)
-
-    def buttons(self):
-        return [
-            (u"抽取未翻译的原文", lambda : tools.DiffLan(TkinterDnD.Tk(), u"抽取未翻译的原文")),
-            (u"对比erl到各个版本", lambda : CompErl(tkinter.Toplevel()).pack()),
-            (u"对比erl到各个版本", lambda : CompErl(tkinter.Toplevel()).pack()),
-            (u"对比erl到各个版本", lambda : CompErl(tkinter.Toplevel()).pack()),
-            (u"对比erl到各个版本", lambda : CompErl(tkinter.Toplevel()).pack()),
-            (u"对比erl到各个版本", lambda : CompErl(tkinter.Toplevel()).pack()),
-            (u"对比erl到各个版本", lambda : CompErl(tkinter.Toplevel()).pack()),
-            (u"对比erl到各个版本", lambda : CompErl(tkinter.Toplevel()).pack()),
-            (u"对比erl到各个版本", lambda : CompErl(tkinter.Toplevel()).pack()),
-            (u"对比erl到各个版本", lambda : CompErl(tkinter.Toplevel()).pack()),
-            (u"对比erl到各个版本", lambda : CompErl(tkinter.Toplevel()).pack()),
-        ]
+        tabframe = TabsView(master=self, column = 2)
+        tabframe.pack(anchor = tkinter.W)
+        tabs = {
+            u'抽取未翻译的原文':tools.DiffLan,
+            u'删除无用的翻译':tools.SlimLan,
+            u'测试':tools.TestView
+            }
+        for tabname in tabs:
+            tabframe.add(tabname, tabs[tabname])
 

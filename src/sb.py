@@ -188,7 +188,7 @@ def fix_format_help(root, file_2):
     else:
         wb = openpyxl.load_workbook(excelfilename)
         ws = wb[wb.sheetnames[0]]
-        rep = re.compile(r'[\r\n]+|^[\s]+|[\s]+$')
+        rep = re.compile(r'^[\s]+|[\s]+$')
         for i in ws.iter_rows():
             for k in range(1,2):
                 src = i[k].value

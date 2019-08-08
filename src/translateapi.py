@@ -31,7 +31,7 @@ def find_in_ws(lang, dictionary):
     lang = escape_string(lang)
     if lang in dictionary:
         v = dictionary[lang]
-        if type(V) == str:
+        if type(v) == str:
             return v.strip()
         else: 
             return v
@@ -145,7 +145,7 @@ def translate_with_dict(lanlist, dictionary):
         obj = item['lang']
         if type(obj) == str:
             dest = find_in_ws(obj, dictionary)
-            if dest != None and != "":
+            if dest != None and dest != "":
                 dest = invert_escape_string(dest)
                 item['lang'] = dest
             elif is_cn.search(obj):
