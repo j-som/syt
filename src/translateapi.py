@@ -41,14 +41,14 @@ def collect_in_object(obj, cns):
     if type(obj) == dict:
         for _, item in obj.items():
             if type(item) == str:
-                if is_cn.search(item):
+                if pick_it(item):
                     cns[item] = cns[item] + 1 if item in cns else 1
             elif type(item) == dict or type(item) == list:
                 collect_in_object(item, cns)
     elif type(obj) == list:
         for item in obj:
             if type(item) == str:
-                if is_cn.search(item):
+                if pick_it(item):
                     cns[item] = cns[item] + 1 if item in cns else 1
             elif type(item) == dict or type(item) == list:
                 collect_in_object(item, cns)
@@ -134,7 +134,7 @@ def create_cn_set(lanlist):
     for item in lanlist:
         obj = item['lang']
         if type(obj) == str:
-            if is_cn.search(obj):
+            if pick_it(obj):
                 cnset[obj] = cnset[obj] + 1 if obj in cnset else 1
         else:
             collect_in_object(obj, cnset)
@@ -148,7 +148,7 @@ def translate_with_dict(lanlist, dictionary):
             if dest != None and dest != "":
                 dest = invert_escape_string(dest)
                 item['lang'] = dest
-            elif is_cn.search(obj):
+            elif pick_it(obj):
                 sytlog.log(u"[" + obj + u"]未找到译文\n")
         else: 
             translate_in_obj(obj, dictionary)
@@ -168,6 +168,9 @@ def update_with_dict(lanlist, dictionary):
             if change > 0:
                 updatelist.append(item)
     return updatelist
+
+def pick_it(item):
+    return is_cn.search(item)
 
 def make_update_dict(old_dict, new_dict):
     update_dict = {}

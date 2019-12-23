@@ -420,11 +420,12 @@ class CompErl(tkinter.Frame):
 class ToolsView(tkinter.Frame):
     def __init__(self, master):
         tkinter.Frame.__init__(self, master = master)
-        tabframe = TabsView(master=self, column = 2)
+        tabframe = TabsView(master=self, column = 5)
         tabframe.pack(anchor = tkinter.W)
         tabs = {
             u'抽取未翻译的原文':tools.DiffLan,
             u'删除无用的翻译':tools.SlimLan,
+            u'去掉不翻译的表':tools.SkipView,
             u'测试':tools.TestView
             }
         for tabname in tabs:

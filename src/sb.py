@@ -221,7 +221,7 @@ if __name__ == "__main__":
     root.title(u"翻译工具")
     # fix_escape(root)
     # fix_talk(root)
-    # diff_lan(root)
-    fix_format(root)
+    diff_lan(root)
+    # fix_format(root)
     root.mainloop()
 
